@@ -10,9 +10,9 @@ Built for the <b>AMD Developer Challenge 2026</b>
 
 ---
 
-# 📖 Overview
+# Project Overview
 
-CareLoop is an AI-powered web application designed to help family caregivers recognize burnout before it becomes a serious mental or physical health issue.
+CareLoop is an AI powered web application designed to help family caregivers recognize burnout before it becomes a serious mental or physical health issue.
 
 Caregivers often neglect their own wellbeing while caring for loved ones. CareLoop allows users to write a daily journal entry, analyzes the emotional content using Artificial Intelligence, detects burnout indicators, tracks wellbeing over time, and recommends relevant support resources.
 
@@ -20,7 +20,7 @@ The application is lightweight, fully containerized with Docker, and can run eit
 
 ---
 
-# 🎯 Problem Statement
+# Problem Statement
 
 Millions of caregivers experience stress, isolation, sleep deprivation, and emotional exhaustion without realizing how serious their condition has become.
 
@@ -30,7 +30,7 @@ CareLoop focuses on the caregiver.
 
 ---
 
-# 💡 Solution
+# Solution
 
 CareLoop helps caregivers by
 
@@ -43,22 +43,7 @@ CareLoop helps caregivers by
 
 ---
 
-# ✨ Features
-
-- AI-powered burnout analysis
-- Daily caregiver journal
-- Burnout trend visualization
-- Personalized emotional summary
-- Support resource recommendations
-- Firebase cloud storage
-- Local JSON backup
-- Dockerized deployment
-- FastAPI REST API
-- Responsive web interface
-
----
-
-# 🛠 Tech Stack
+# Tech Stack
 
 ## Frontend
 
@@ -75,7 +60,7 @@ CareLoop helps caregivers by
 
 - Google Gemini API
 - Fireworks AI
-- Rule-Based Fallback Scoring
+
 
 ## Database
 
@@ -89,7 +74,7 @@ CareLoop helps caregivers by
 
 ---
 
-# 🏗 System Architecture
+# System Architecture
 
 ```
 
@@ -117,7 +102,7 @@ Support Resources
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```
 
@@ -150,7 +135,7 @@ CareLoop
 
 ---
 
-# 🔄 Workflow
+# Workflow
 
 1. User writes a journal entry.
 2. Frontend sends the entry to the FastAPI backend.
@@ -162,23 +147,7 @@ CareLoop
 
 ---
 
-# 📊 Burnout Categories
-
-CareLoop evaluates five burnout indicators.
-
-| Category | Description |
-|-----------|-------------|
-| Sleep Loss | Sleep quality and fatigue |
-| Isolation | Feeling lonely or unsupported |
-| Resentment | Frustration or anger |
-| Physical Strain | Physical tiredness or pain |
-| Emotional Exhaustion | Mental fatigue and burnout |
-
-Each category is scored from **0 to 10**.
-
----
-
-# 📋 Prerequisites
+# Prerequisites
 
 Before running the project, install
 
@@ -191,7 +160,7 @@ Before running the project, install
 
 ---
 
-# 🚀 Installation
+#  Installation
 
 ## Clone the Repository
 
@@ -248,7 +217,7 @@ docker compose up --build
 
 ---
 
-# 🌐 Access the Application
+# Access the Application
 
 Frontend
 
@@ -270,7 +239,7 @@ http://localhost:8000/api/health
 
 ---
 
-# 🛑 Stop the Application
+#  Stop the Application
 
 ```bash
 docker compose down
@@ -278,7 +247,7 @@ docker compose down
 
 ---
 
-# 🔄 Rebuild After Code Changes
+#  Rebuild After Code Changes
 
 ```bash
 docker compose down
@@ -288,7 +257,7 @@ docker compose up --build
 
 ---
 
-# 💾 Storage
+# Storage
 
 CareLoop stores journal entries in
 
@@ -304,7 +273,7 @@ This ensures uninterrupted functionality.
 
 ---
 
-# 🤖 AI Pipeline
+#  AI Pipeline
 
 Priority Order
 
@@ -351,21 +320,9 @@ The application is fully containerized using Docker and can be deployed on
 
 ---
 
-# 🔮 Future Improvements
-
-- Voice journal support
-- Mobile application
-- AI chatbot for caregivers
-- Multi-language support
-- Wearable device integration
-- Weekly wellness reports
-- Emergency caregiver alerts
-
----
-
 # 👥 Team
 
-## Team Kinfolk Circle
+## Kinfolk Circle
 
 | Member | Role |
 |---------|------|
@@ -393,11 +350,4 @@ AI-powered Healthcare Solution
 This project is created for educational and hackathon purposes.
 
 ---
-
-# ❤️ Thank You
-
-Thank you for reviewing **CareLoop**.
-
-Our goal is to empower caregivers with AI-driven insights, helping them recognize burnout early and prioritize their own wellbeing while caring for others.
-
-We hope CareLoop contributes to healthier caregivers and stronger communities.
+ies.
