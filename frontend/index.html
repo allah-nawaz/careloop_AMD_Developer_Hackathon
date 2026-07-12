@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareLoop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ---------------------------------------------------------------
+     Design tokens. Change these six values and the whole page
+     re-themes itself - nothing below this block should hardcode
+     a color or font.
+  --------------------------------------------------------------- */
+  :root {
+    --bg: #efede6;
+    --surface: #fbfaf6;
+    --ink: #33362f;
+    --muted: #8a8b82;
+    --sage: #7c9473;
+    --rose: #c98a7d;
+    --gold: #c9a267;
+    --line: #dedacd;
+
+    --display-font: 'Fraunces', Georgia, serif;
+    --body-font: 'IBM Plex Sans', system-ui, sans-serif;
+    --mono-font: 'IBM Plex Mono', monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--body-font);
+    line-height: 1.55;
+  }
+
+  body::before {
+    content: "";
+    display: block;
+    height: 5px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--sage) 0%, var(--gold) 50%, var(--rose) 100%);
+  }
+
+  .page {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  /* ---------------- Header ---------------- */
+
+  header.hero {
+    margin-bottom: 56px;
+    background: linear-gradient(135deg, rgba(124, 148, 115, 0.16) 0%, rgba(201, 162, 103, 0.10) 55%, rgba(124, 148, 115, 0) 100%);
+    border-radius: 24px;
+    padding: 40px 32px 8px;
+    margin-left: -32px;
+    margin-right: -32px;
+    text-align: center;
+  }
+
+  .mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .mark .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--sage);
+    animation: breathe 3.2s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.35); opacity: 0.65; }
+  }
+
+  .mark span {
+    font-family: var(--mono-font);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  h1 {
+    font-family: var(--display-font);
+    font-weight: 500;
+    font-size: clamp(36px, 6vw, 52px);
+    line-height: 1.08;
+    margin: 0 0 18px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--sage);
+  }
+
+  .lede {
+    font-size: 17px;
+    color: var(--muted);
+    max-width: 46ch;
+    margin: 0 auto;
+  }
+
+  /* ---------------- Journal card ---------------- */
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px;
+    margin-bottom: 28px;
+    box-shadow: 0 10px 30px -18px rgba(51, 54, 47, 0.35);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 16px 36px -16px rgba(51, 54, 47, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .card h2 {
+    font-family: var(--display-font);
+    font-weight: 500;
+    font-size: 22px;
+    margin: 0 0 6px;
+  }
+
+  .card .hint {
+    font-size: 14px;
+    color: var(--muted);
+    margin: 0 0 20px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 130px;
+    resize: vertical;
+    padding: 16px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    font-family: var(--body-font);
+    font-size: 15px;
+    color: var(--ink);
+  }
+
+  textarea:focus {
+    outline: 2px solid var(--sage);
+    outline-offset: 2px;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .input-tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mic-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    box-shadow: none;
+    flex-shrink: 0;
+  }
+
+  .mic-btn:hover {
+    background: var(--surface);
+    transform: none;
+    box-shadow: none;
+    border-color: var(--sage);
+  }
+
+  .mic-btn svg { width: 18px; height: 18px; }
+
+  .mic-btn.recording {
+    background: var(--rose);
+    border-color: var(--rose);
+    color: #fff;
+    animation: breathe 1.6s ease-in-out infinite;
+  }
+
+  .mic-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: var(--surface);
+    transform: none;
+    box-shadow: none;
+  }
+
+  button {
+    font-family: var(--body-font);
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    background: linear-gradient(135deg, var(--ink) 0%, var(--sage) 100%);
+    border: none;
+    border-radius: 999px;
+    padding: 12px 24px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 6px 16px -8px rgba(51, 54, 47, 0.5);
+  }
+
+  button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -8px rgba(124, 148, 115, 0.55);
+  }
+  button:disabled { background: var(--muted); cursor: default; transform: none; box-shadow: none; }
+
+  .status {
+    font-family: var(--mono-font);
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  /* ---------------- Reflection (AI response) ---------------- */
+
+  .reflection {
+    display: none;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .reflection.visible {
+    display: block;
+    animation: riseIn 0.5s ease forwards;
+  }
+
+  @keyframes riseIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .summary-line {
+    font-family: var(--display-font);
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink);
+    border-left: 3px solid var(--sage);
+    padding-left: 16px;
+    margin: 4px 0 24px;
+  }
+
+  .category-row {
+    display: grid;
+    grid-template-columns: 150px 1fr 34px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+
+  .category-name {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .bar-track {
+    height: 8px;
+    background: var(--bg);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: var(--sage);
+    width: 0%;
+    transition: width 0.6s ease;
+  }
+
+  .bar-fill.medium { background: var(--gold); }
+  .bar-fill.high { background: var(--rose); }
+
+  .category-value {
+    font-family: var(--mono-font);
+    font-size: 13px;
+    text-align: right;
+    color: var(--muted);
+  }
+
+  /* ---------------- Trend (signature element) ---------------- */
+
+  .trend-card {
+    background: linear-gradient(160deg, var(--ink) 0%, #3f4536 100%);
+    color: var(--bg);
+  }
+
+  .trend-card h2 { color: var(--bg); }
+
+  .trend-card .hint { color: #b9bab1; }
+
+  .trend-empty {
+    font-size: 14px;
+    color: #b9bab1;
+    padding: 24px 0;
+  }
+
+  svg.pulse { width: 100%; height: 120px; display: block; }
+
+  .pulse path.line {
+    fill: none;
+    stroke: var(--sage);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+  }
+
+  .pulse circle {
+    fill: var(--gold);
+    stroke: var(--bg);
+    stroke-width: 2;
+  }
+
+  .trend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono-font);
+    font-size: 12px;
+    color: #b9bab1;
+    margin-top: 8px;
+  }
+
+  /* ---------------- Resources ---------------- */
+
+  .resource-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .resource-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+  }
+
+  .resource-list li:last-child { border-bottom: none; }
+
+  .resource-tag {
+    font-family: var(--mono-font);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: var(--bg);
+    white-space: nowrap;
+  }
+
+  .resource-tag.community, .resource-tag.article { color: var(--sage); background: rgba(124, 148, 115, 0.14); }
+  .resource-tag.counseling, .resource-tag.helpline { color: var(--rose); background: rgba(201, 138, 125, 0.16); }
+  .resource-tag.respite_care { color: var(--gold); background: rgba(201, 162, 103, 0.18); }
+
+  footer {
+    margin-top: 48px;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill { transition: none; }
+    .mark .dot { animation: none; }
+    .reflection.visible { animation: none; opacity: 1; transform: none; }
+    button { transition: none; }
+    .card { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="hero">
+    <div class="mark"><span class="dot"></span><span>CareLoop</span></div>
+    <h1>A quiet place to say<br><em>how caregiving really feels.</em></h1>
+    <p class="lede">Speak or type a few honest lines about your day. CareLoop reflects
+      what it hears back to you, gently, and watches for early signs of burnout
+      before they become a crisis.</p>
+  </header>
+
+  <section class="card" style="--accent: var(--sage)">
+    <h2>Today's entry</h2>
+    <p class="hint">Write it the way you'd say it out loud. Nothing here is graded.</p>
+    <textarea id="journalInput" placeholder="I haven't slept properly in days, and I feel like no one notices how much I'm carrying..."></textarea>
+    <div class="row">
+      <div class="input-tools">
+        <button type="button" id="micBtn" class="mic-btn" title="Speak your entry" aria-label="Speak your entry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+            <line x1="12" y1="19" x2="12" y2="23"></line>
+            <line x1="8" y1="23" x2="16" y2="23"></line>
+          </svg>
+        </button>
+        <span class="status" id="statusText"></span>
+      </div>
+      <button id="submitBtn">Reflect on this</button>
+    </div>
+  </section>
+
+  <section class="card reflection" id="reflectionCard" style="--accent: var(--gold)">
+    <h2>What CareLoop noticed</h2>
+    <p class="summary-line" id="summaryLine"></p>
+    <div id="categoryList"></div>
+  </section>
+
+  <section class="card trend-card" style="--accent: var(--gold)">
+    <h2>Your trend over time</h2>
+    <p class="hint">Each pulse is one entry. A steadier, lower line is a good sign.</p>
+    <div id="trendContainer">
+      <p class="trend-empty">Your first entry will start the line.</p>
+    </div>
+  </section>
+
+  <section class="card" style="--accent: var(--rose)">
+    <h2>Support worth a look</h2>
+    <p class="hint">Chosen based on what's showing up most in your recent entries.</p>
+    <ul class="resource-list" id="resourceList"></ul>
+  </section>
+
+  <footer>AMD Developer Hackathon <span class="dot-sep">&middot;</span> Kinfolk Circle<br>&copy; Allah Nawaz</footer>
+
+</div>
+
+<script>
+  // Point this at wherever the backend is running. In local
+  // development with docker compose, this is the default.
+  const API_BASE = "http://localhost:8000";
+
+  const CATEGORY_LABELS = {
+    sleep_loss: "Sleep loss",
+    isolation: "Isolation",
+    resentment: "Resentment",
+    physical_strain: "Physical strain",
+    emotional_exhaustion: "Emotional exhaustion",
+  };
+
+  const journalInput = document.getElementById("journalInput");
+  const submitBtn = document.getElementById("submitBtn");
+  const micBtn = document.getElementById("micBtn");
+  const statusText = document.getElementById("statusText");
+  const reflectionCard = document.getElementById("reflectionCard");
+  const summaryLine = document.getElementById("summaryLine");
+  const categoryList = document.getElementById("categoryList");
+  const trendContainer = document.getElementById("trendContainer");
+  const resourceList = document.getElementById("resourceList");
+
+  // ---------------- Voice-to-text (built into the browser, no API key needed) ----------------
+
+  const SpeechRecognitionClass = window.SpeechRecognition || window.webkitSpeechRecognition;
+  let recognition = null;
+  let isRecording = false;
+  let textBeforeRecording = "";
+
+  if (SpeechRecognitionClass) {
+    recognition = new SpeechRecognitionClass();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";
+
+    recognition.onresult = (event) => {
+      let finalTranscript = "";
+      let interimTranscript = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript;
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      const separator = textBeforeRecording && !textBeforeRecording.endsWith(" ") ? " " : "";
+      journalInput.value = textBeforeRecording + separator + finalTranscript + interimTranscript;
+    };
+
+    recognition.onerror = (event) => {
+      let message = "Something went wrong with voice input. Try typing instead.";
+      if (event.error === "not-allowed" || event.error === "service-not-allowed") {
+        message = "Microphone access is blocked. Click the lock or camera icon in your browser's address bar, allow the microphone, then try again.";
+      } else if (event.error === "no-speech") {
+        message = "Didn't hear anything. Try again, a bit closer to the mic.";
+      } else if (event.error === "network") {
+        message = "Voice recognition needs an internet connection. Check your connection and try again.";
+      } else if (event.error === "audio-capture") {
+        message = "No microphone was found. Check that one is connected and try again.";
+      }
+      statusText.textContent = message;
+      stopRecording();
+    };
+
+    recognition.onend = () => {
+      if (isRecording) stopRecording();
+    };
+  } else {
+    micBtn.disabled = true;
+    micBtn.title = "Voice input isn't supported in this browser";
+  }
+
+  async function startRecording() {
+    // Ask for microphone permission explicitly first. This makes the
+    // browser's permission prompt appear reliably, instead of relying
+    // on recognition.start() alone, which some browsers handle poorly.
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop()); // release it, recognition opens its own
+    } catch (err) {
+      statusText.textContent = "Microphone access is blocked. Allow it in your browser's site settings, then try again.";
+      return;
+    }
+
+    textBeforeRecording = journalInput.value.trim();
+    isRecording = true;
+    micBtn.classList.add("recording");
+    statusText.textContent = "Listening...";
+    try {
+      recognition.start();
+    } catch (err) {
+      // Fires if recognition was already running - reset and let the
+      // person tap the mic again.
+      isRecording = false;
+      micBtn.classList.remove("recording");
+      statusText.textContent = "Tap the mic again to start.";
+    }
+  }
+
+  function stopRecording() {
+    isRecording = false;
+    micBtn.classList.remove("recording");
+    if (statusText.textContent === "Listening...") statusText.textContent = "";
+    try { recognition.stop(); } catch (err) { /* already stopped */ }
+  }
+
+  micBtn.addEventListener("click", () => {
+    if (!recognition) return;
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  });
+
+  async function submitEntry() {
+    if (isRecording) stopRecording();
+    const text = journalInput.value.trim();
+    if (!text) {
+      statusText.textContent = "Write a few lines first.";
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusText.textContent = "Reading your entry...";
+
+    try {
+      const response = await fetch(`${API_BASE}/api/journal`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) throw new Error("Request failed");
+
+      const result = await response.json();
+      renderReflection(result);
+      await loadHistory();
+      await loadResources();
+      journalInput.value = "";
+      statusText.textContent = "Saved just now.";
+    } catch (err) {
+      statusText.textContent = "Something went wrong. Is the backend running?";
+    } finally {
+      submitBtn.disabled = false;
+    }
+  }
+
+  function renderReflection(result) {
+    reflectionCard.classList.add("visible");
+    summaryLine.textContent = result.summary && result.summary.length
+      ? result.summary
+      : "Thank you for putting this into words.";
+
+    categoryList.innerHTML = "";
+    for (const [key, label] of Object.entries(CATEGORY_LABELS)) {
+      const value = result.scores[key] ?? 0;
+      const tier = value >= 7 ? "high" : value >= 4 ? "medium" : "";
+      const row = document.createElement("div");
+      row.className = "category-row";
+      row.innerHTML = `
+        <span class="category-name">${label}</span>
+        <span class="bar-track"><span class="bar-fill ${tier}" style="width:${value * 10}%"></span></span>
+        <span class="category-value">${value}</span>
+      `;
+      categoryList.appendChild(row);
+    }
+  }
+
+  async function loadHistory() {
+    try {
+      const response = await fetch(`${API_BASE}/api/history`);
+      const entries = await response.json();
+      renderTrend(entries);
+    } catch (err) {
+      // Quietly leave the empty state in place if this fails.
+    }
+  }
+
+  function renderTrend(entries) {
+    if (!entries.length) return;
+
+    const width = 640;
+    const height = 100;
+    const padding = 12;
+    const points = entries.slice(-12); // keep the line readable
+
+    const stepX = points.length > 1 ? (width - padding * 2) / (points.length - 1) : 0;
+
+    const coords = points.map((entry, i) => {
+      const x = padding + stepX * i;
+      // Higher burnout score draws a taller pulse - fitting for
+      // a page whose whole point is watching for rising strain.
+      const y = height - padding - (entry.overall / 10) * (height - padding * 2);
+      return { x, y };
+    });
+
+    let pathData = `M ${coords[0].x} ${coords[0].y}`;
+    for (let i = 1; i < coords.length; i++) {
+      const prev = coords[i - 1];
+      const curr = coords[i];
+      const midX = (prev.x + curr.x) / 2;
+      pathData += ` C ${midX} ${prev.y}, ${midX} ${curr.y}, ${curr.x} ${curr.y}`;
+    }
+
+    const dots = coords.map(c => `<circle cx="${c.x}" cy="${c.y}" r="4"></circle>`).join("");
+
+    trendContainer.innerHTML = `
+      <svg class="pulse" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
+        <path class="line" d="${pathData}"></path>
+        ${dots}
+      </svg>
+      <div class="trend-labels">
+        <span>${formatDateNoSlash(points[0].timestamp)}</span>
+        <span>${formatDateNoSlash(points[points.length - 1].timestamp)}</span>
+      </div>
+    `;
+  }
+
+  function formatDateNoSlash(timestamp) {
+    // toLocaleDateString() defaults to slash-separated dates like
+    // "7/11/2026" - this gives "Jul 11" instead, no slashes.
+    const date = new Date(timestamp);
+    return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+  }
+
+  async function loadResources() {
+    try {
+      const response = await fetch(`${API_BASE}/api/resources`);
+      const data = await response.json();
+      resourceList.innerHTML = "";
+      for (const item of data.resources) {
+        const li = document.createElement("li");
+        li.innerHTML = `<span>${item.title}</span><span class="resource-tag ${item.type}">${item.type.replace("_", " ")}</span>`;
+        resourceList.appendChild(li);
+      }
+    } catch (err) {
+      // Leave the list empty if the backend isn't reachable yet.
+    }
+  }
+
+  submitBtn.addEventListener("click", submitEntry);
+  journalInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && e.metaKey) submitEntry();
+  });
+
+  // Load whatever history and resources already exist on page load.
+  loadHistory();
+  loadResources();
+</script>
+
+</body>
+</html>
